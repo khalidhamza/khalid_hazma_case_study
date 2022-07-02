@@ -18,7 +18,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function(){
     Route::fallback('ApiController@fallbackRoute');
 
     Route::group(['prefix' => 'v1', 'middleware' => ['verifyApiToken']], function(){
+        // user auth
+        Route::post('register', 'UserController@register');
+        Route::post('login', 'UserController@login');
     
-        
     });
 });
