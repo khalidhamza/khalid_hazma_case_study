@@ -18,10 +18,10 @@ class UserController extends ApiController
     public function register(Request $request)
     {
         $rules      = [            
-            'name'              => 'required',            
-            'email'             => 'required|email|unique:users,email',
-            'password'          => 'required',
-            'confirm_password'  => 'required|same:password'
+            'name'              => ['required'],            
+            'email'             => ['required', 'email', 'unique:users,email'],
+            'password'          => ['required'],
+            'confirm_password'  => ['required', 'same:password']
         ];
 
         $validate   = Validator::make($request->all(), $rules);
@@ -47,10 +47,9 @@ class UserController extends ApiController
     public function login(Request $request)
     {
         $rules      = [                        
-            'email'     => 'required|email',            
-            'password'  => 'required',            
+            'email'     => ['required', 'email'],            
+            'password'  => ['required'],            
         ];
-
         $validate   = Validator::make($request->all(), $rules);
         if($validate->fails()){
             $errors     = $validate->errors()->toArray();

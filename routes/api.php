@@ -21,6 +21,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function(){
         // user auth
         Route::post('auth/register', 'UserController@register');
         Route::post('auth/login', 'UserController@login');
-    
+        
+        // products
+        Route::post('products', 'ProductController@create');
+        Route::get('products', 'ProductController@get');
+        Route::get('products/{id}', 'ProductController@details');
+        Route::post('products/{id}', 'ProductController@update');
     });
 });

@@ -14,4 +14,17 @@ class ApiController extends Controller
     {
         return $this->apiResults(110, 'api_not_found');
     }
+
+    /**
+     * Make Directory
+     * 
+     * @param string $path
+     * @return void
+     */
+    function makeDirectory($path)
+    {
+        if(! file_exists($path)){
+            mkdir($path, 777);
+        }
+    }
 }
