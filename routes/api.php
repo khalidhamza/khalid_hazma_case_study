@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function(){
     Route::fallback('ApiController@fallbackRoute');
 
-    Route::group(['prefix' => 'v1', 'middleware' => ['verifyApiToken']], function(){
+    Route::group(['prefix' => 'v1'], function(){
         // user auth
         Route::post('auth/register', 'UserController@register');
         Route::post('auth/login', 'UserController@login');
@@ -26,6 +26,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function(){
         Route::post('products', 'ProductController@create');
         Route::get('products', 'ProductController@get');
         Route::get('products/{id}', 'ProductController@details');
-        Route::post('products/{id}', 'ProductController@update');
+        Route::delete('products/{id}', 'ProductController@delete');
+
+        // cart
+        Route::group(['middleware' => 'identifyUser'], function(){
+            Route::post('cart', 'CartController@create');
+            Route::put('cart/{id}', 'CartController@update');
+            Route::delete('cart/{id}', 'CartController@delete');
+            Route::get('cart', 'CartController@get');
+        });
     });
 });

@@ -59,49 +59,25 @@ class ProductController extends ApiController
         return $this->apiResults(200, 'success', $product);
     }
 
-    public function update($id, Request $request)
+    public function delete($id)
     {
-        $rules      = [                        
-            'category_id'       => ['required', 'integer', 'exists:categories,id'],
-            'name'              => ['required'],
-            'description'       => ['required'],
-            'price'             => ['required', 'numeric'],
-            'avatar'            => ['nullable', 'image'],
-            'developer_email'   => ['nullable']
-        ];
-        $validate   = Validator::make($request->all(), $rules);
-        if($validate->fails()){
-            $errors     = $validate->errors()->toArray();
-            return $this->apiValidationErrors($errors);
-        }else{
-            $path       = public_path("products");
-            $product    = Product::find($id);
-            if ($product) {
-                $imageName  = $product->avatar;
+        $path       = public_path("products");
+        $product    = Product::find($id);
+        if ($product) {
+            $imageName  = $product->avatar;
 
-                // delete existing image
-                if($request->hasFile('image')){
-                    $delFile    = "{$path}/{$imageName}";
-                    File::delete($delFile);
-                    $imageName  = null;        
-                }
-
-                // update the image
-                if($request->hasFile('avatar')){
-                    $avatarFile     = $request->file('avatar');
-                    $imageName       = $avatarFile->hashName();
-                    $avatarFile->move($path, $imageName);
-                }
-
-                $requestData    = $request->except('api_key');
-                $requestData['avatar'] = $imageName;
-
-                $product->update($requestData);
-
-                return $this->apiResults(200, 'product_updated');
-            }else{
-                return $this->apiResults(404, 'product_not_found');
+            // delete existing image
+            if(! empty($imageName)){
+                $delFile    = "{$path}/{$imageName}";
+                File::delete($delFile);
+                $imageName  = null;        
             }
+
+            $product->delete();
+
+            return $this->apiResults(200, 'product_deleted');
+        }else{
+            return $this->apiResults(404, 'product_not_found');
         }
     }
 }
