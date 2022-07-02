@@ -19,8 +19,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function(){
 
     Route::group(['prefix' => 'v1', 'middleware' => ['verifyApiToken']], function(){
         // user auth
-        Route::post('register', 'UserController@register');
-        Route::post('login', 'UserController@login');
+        Route::post('auth/register', 'UserController@register');
+        Route::post('auth/login', 'UserController@login');
     
     });
 });
